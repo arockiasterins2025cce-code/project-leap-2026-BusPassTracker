@@ -1,17 +1,21 @@
 package com.example.buspass.service;
 
+import java.time.LocalDate;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.example.buspass.dto.ApplyPassRequest;
 import com.example.buspass.dto.DecisionRequest;
-import com.example.buspass.entity.*;
+import com.example.buspass.entity.BusRoute;
+import com.example.buspass.entity.PassApplication;
+import com.example.buspass.entity.PassStatus;
+import com.example.buspass.entity.Student;
 import com.example.buspass.exception.BusinessRuleException;
 import com.example.buspass.exception.ResourceNotFoundException;
 import com.example.buspass.repository.BusRouteRepository;
 import com.example.buspass.repository.PassApplicationRepository;
 import com.example.buspass.repository.StudentRepository;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
-import java.util.List;
 
 @Service
 public class PassApplicationService {
@@ -63,19 +67,21 @@ public class PassApplicationService {
             throw new BusinessRuleException("Student already has an active bus pass.");
         }
 
-        int validityDays = request.validityDays() == null ? 180 : request.validityDays();
+        Integer validityDaysValue = request.validityDays();
+        int validityDays = validityDaysValue == null ? 180 : validityDaysValue;
         if (validityDays <= 0) {
             throw new BusinessRuleException("Validity days must be greater than zero.");
         }
 
         LocalDate from = LocalDate.now();
         application.setStatus(PassStatus.APPROVED);
-        application.setPassNumber("BP-" + String.format("%06d", application.getId()));
         application.setValidFrom(from);
         application.setValidUntil(from.plusDays(validityDays));
         application.setAdminRemark(request.remark());
 
-        return applicationRepository.save(application);
+        PassApplication savedApplication = applicationRepository.save(application);
+        savedApplication.setPassNumber("BP-" + String.format("%06d", savedApplication.getId()));
+        return applicationRepository.save(savedApplication);
     }
 
     public PassApplication reject(Long id, DecisionRequest request) {

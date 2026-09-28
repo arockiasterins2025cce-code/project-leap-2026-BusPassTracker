@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <style>
         :root {
             --primary: #4f46e5;
@@ -43,9 +43,9 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            background-image: 
-                radial-gradient(at 0% 0%, rgba(79, 70, 229, 0.15) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.15) 0px, transparent 50%);
+            background-image:
+                    radial-gradient(at 0% 0%, rgba(79, 70, 229, 0.15) 0px, transparent 50%),
+                    radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.15) 0px, transparent 50%);
             background-attachment: fixed;
         }
 
@@ -612,535 +612,535 @@
 </head>
 <body>
 
-    <!-- Navigation Header -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="#" class="brand">
-                <div class="brand-icon">
-                    <i class="fa-solid fa-bus-simple"></i>
-                </div>
-                <div class="brand-text">
-                    <h1>BusPass</h1>
-                    <p>Student Bus Pass Application Tracker</p>
-                </div>
-            </a>
-            <div class="nav-links">
-                <button class="nav-btn active" onclick="switchTab('home')">
-                    <i class="fa-solid fa-house"></i> Home
-                </button>
-                <button class="nav-btn" onclick="switchTab('students')">
-                    <i class="fa-solid fa-user-graduate"></i> Students
-                </button>
-                <button class="nav-btn" onclick="switchTab('routes')">
-                    <i class="fa-solid fa-route"></i> Routes
-                </button>
-                <button class="nav-btn" onclick="switchTab('apply')">
-                    <i class="fa-solid fa-file-signature"></i> Apply Pass
-                </button>
-                <button class="nav-btn" onclick="switchTab('status')">
-                    <i class="fa-solid fa-id-card"></i> Check Status
-                </button>
-                <button class="nav-btn" onclick="switchTab('admin')">
-                    <i class="fa-solid fa-user-shield"></i> Admin
-                </button>
+<!-- Navigation Header -->
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="#" class="brand">
+            <div class="brand-icon">
+                <i class="fa-solid fa-bus-simple"></i>
+            </div>
+            <div class="brand-text">
+                <h1>BusPass</h1>
+                <p>Student Bus Pass Application Tracker</p>
+            </div>
+        </a>
+        <div class="nav-links">
+            <button class="nav-btn active" onclick="switchTab('home')">
+                <i class="fa-solid fa-house"></i> Home
+            </button>
+            <button class="nav-btn" onclick="switchTab('students')">
+                <i class="fa-solid fa-user-graduate"></i> Students
+            </button>
+            <button class="nav-btn" onclick="switchTab('routes')">
+                <i class="fa-solid fa-route"></i> Routes
+            </button>
+            <button class="nav-btn" onclick="switchTab('apply')">
+                <i class="fa-solid fa-file-signature"></i> Apply Pass
+            </button>
+            <button class="nav-btn" onclick="switchTab('status')">
+                <i class="fa-solid fa-id-card"></i> Check Status
+            </button>
+            <button class="nav-btn" onclick="switchTab('admin')">
+                <i class="fa-solid fa-user-shield"></i> Admin
+            </button>
+        </div>
+    </div>
+</nav>
+
+<!-- Toast Notifications Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- Main Content Area -->
+<div class="container">
+
+    <!-- STATS BAR -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon stat-students">
+                <i class="fa-solid fa-users"></i>
+            </div>
+            <div class="stat-info">
+                <h3 id="statStudents">0</h3>
+                <p>Registered Students</p>
             </div>
         </div>
-    </nav>
-
-    <!-- Toast Notifications Container -->
-    <div class="toast-container" id="toastContainer"></div>
-
-    <!-- Main Content Area -->
-    <div class="container">
-
-        <!-- STATS BAR -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-icon stat-students">
-                    <i class="fa-solid fa-users"></i>
-                </div>
-                <div class="stat-info">
-                    <h3 id="statStudents">0</h3>
-                    <p>Registered Students</p>
-                </div>
+        <div class="stat-card">
+            <div class="stat-icon stat-routes">
+                <i class="fa-solid fa-map-location-dot"></i>
             </div>
-            <div class="stat-card">
-                <div class="stat-icon stat-routes">
-                    <i class="fa-solid fa-map-location-dot"></i>
-                </div>
-                <div class="stat-info">
-                    <h3 id="statRoutes">0</h3>
-                    <p>Active Routes</p>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon stat-active">
-                    <i class="fa-solid fa-circle-check"></i>
-                </div>
-                <div class="stat-info">
-                    <h3 id="statApproved">0</h3>
-                    <p>Approved Passes</p>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon stat-pending">
-                    <i class="fa-solid fa-clock"></i>
-                </div>
-                <div class="stat-info">
-                    <h3 id="statPending">0</h3>
-                    <p>Pending Review</p>
-                </div>
+            <div class="stat-info">
+                <h3 id="statRoutes">0</h3>
+                <p>Active Routes</p>
             </div>
         </div>
-
-        <!-- TAB 1: HOME OVERVIEW -->
-        <div id="tab-home" class="tab-screen active">
-            <div class="hero">
-                <div class="hero-text">
-                    <h2>Student Bus Pass Application Tracker</h2>
-                    <p>Streamlined college transportation management system. Register students, apply for bus passes online, track real-time approval status, and manage active routes effortlessly.</p>
-                    <div class="hero-actions">
-                        <button class="btn" onclick="switchTab('apply')">
-                            <i class="fa-solid fa-paper-plane"></i> Apply for Pass Now
-                        </button>
-                        <button class="btn btn-outline" onclick="switchTab('status')">
-                            <i class="fa-solid fa-magnifying-glass"></i> Check Status
-                        </button>
-                    </div>
-                </div>
-                <div>
-                    <i class="fa-solid fa-bus-simple" style="font-size: 8rem; color: rgba(255, 255, 255, 0.15);"></i>
-                </div>
+        <div class="stat-card">
+            <div class="stat-icon stat-active">
+                <i class="fa-solid fa-circle-check"></i>
             </div>
+            <div class="stat-info">
+                <h3 id="statApproved">0</h3>
+                <p>Approved Passes</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon stat-pending">
+                <i class="fa-solid fa-clock"></i>
+            </div>
+            <div class="stat-info">
+                <h3 id="statPending">0</h3>
+                <p>Pending Review</p>
+            </div>
+        </div>
+    </div>
 
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">
-                        <i class="fa-solid fa-bell"></i> Recent Applications Overview
-                    </div>
-                    <button class="btn btn-outline" onclick="loadHomeOverview()">
-                        <i class="fa-solid fa-arrows-rotate"></i> Refresh
+    <!-- TAB 1: HOME OVERVIEW -->
+    <div id="tab-home" class="tab-screen active">
+        <div class="hero">
+            <div class="hero-text">
+                <h2>Student Bus Pass Application Tracker</h2>
+                <p>Streamlined college transportation management system. Register students, apply for bus passes online, track real-time approval status, and manage active routes effortlessly.</p>
+                <div class="hero-actions">
+                    <button class="btn" onclick="switchTab('apply')">
+                        <i class="fa-solid fa-paper-plane"></i> Apply for Pass Now
+                    </button>
+                    <button class="btn btn-outline" onclick="switchTab('status')">
+                        <i class="fa-solid fa-magnifying-glass"></i> Check Status
                     </button>
                 </div>
-                <div class="table-responsive">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>App ID</th>
-                                <th>Student</th>
-                                <th>Register No</th>
-                                <th>Route</th>
-                                <th>Boarding Point</th>
-                                <th>Status</th>
-                                <th>Pass No</th>
-                            </tr>
-                        </thead>
-                        <tbody id="homeApplicationsTable">
-                            <tr><td colspan="7" style="text-align: center; color: var(--text-muted);">Loading applications...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
+            </div>
+            <div>
+                <i class="fa-solid fa-bus-simple" style="font-size: 8rem; color: rgba(255, 255, 255, 0.15);"></i>
             </div>
         </div>
 
-        <!-- TAB 2: STUDENTS -->
-        <div id="tab-students" class="tab-screen">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">
-                        <i class="fa-solid fa-user-plus"></i> Register New Student
-                    </div>
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    <i class="fa-solid fa-bell"></i> Recent Applications Overview
                 </div>
-                <form id="studentForm" onsubmit="handleRegisterStudent(event)">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Full Name *</label>
-                            <input type="text" id="stdName" placeholder="e.g. John Doe" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Register Number *</label>
-                            <input type="text" id="stdReg" placeholder="e.g. 25CC099" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Department *</label>
-                            <input type="text" id="stdDept" placeholder="e.g. CSE / CCE / ECE" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Year *</label>
-                            <select id="stdYear" required>
-                                <option value="1">Year 1</option>
-                                <option value="2" selected>Year 2</option>
-                                <option value="3">Year 3</option>
-                                <option value="4">Year 4</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Phone Number *</label>
-                            <input type="text" id="stdPhone" placeholder="e.g. 9876543210" required>
-                        </div>
-                    </div>
-                    <div style="margin-top: 1.25rem;">
-                        <button type="submit" class="btn">
-                            <i class="fa-solid fa-plus"></i> Register Student
-                        </button>
-                    </div>
-                </form>
+                <button class="btn btn-outline" onclick="loadHomeOverview()">
+                    <i class="fa-solid fa-arrows-rotate"></i> Refresh
+                </button>
             </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">
-                        <i class="fa-solid fa-users-viewfinder"></i> Registered Students List
-                    </div>
-                    <button class="btn btn-outline" onclick="loadStudents()">
-                        <i class="fa-solid fa-arrows-rotate"></i> Refresh
-                    </button>
-                </div>
-                <div class="table-responsive">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Register No</th>
-                                <th>Department</th>
-                                <th>Year</th>
-                                <th>Phone</th>
-                            </tr>
-                        </thead>
-                        <tbody id="studentsTable">
-                            <tr><td colspan="6" style="text-align: center; color: var(--text-muted);">Loading students...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>App ID</th>
+                        <th>Student</th>
+                        <th>Register No</th>
+                        <th>Route</th>
+                        <th>Boarding Point</th>
+                        <th>Status</th>
+                        <th>Pass No</th>
+                    </tr>
+                    </thead>
+                    <tbody id="homeApplicationsTable">
+                    <tr><td colspan="7" style="text-align: center; color: var(--text-muted);">Loading applications...</td></tr>
+                    </tbody>
+                </table>
             </div>
         </div>
+    </div>
 
-        <!-- TAB 3: ROUTES -->
-        <div id="tab-routes" class="tab-screen">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">
-                        <i class="fa-solid fa-plus-circle"></i> Add Bus Route
-                    </div>
-                </div>
-                <form id="routeForm" onsubmit="handleAddRoute(event)">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Route Number *</label>
-                            <input type="text" id="rtNumber" placeholder="e.g. R04" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Route Name *</label>
-                            <input type="text" id="rtName" placeholder="e.g. Tirupur - College" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Boarding Point *</label>
-                            <input type="text" id="rtBoarding" placeholder="e.g. Old Bus Stand" required>
-                        </div>
-                    </div>
-                    <div style="margin-top: 1.25rem;">
-                        <button type="submit" class="btn">
-                            <i class="fa-solid fa-route"></i> Save Route
-                        </button>
-                    </div>
-                </form>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">
-                        <i class="fa-solid fa-bus"></i> Active Bus Routes
-                    </div>
-                    <button class="btn btn-outline" onclick="loadRoutes()">
-                        <i class="fa-solid fa-arrows-rotate"></i> Refresh
-                    </button>
-                </div>
-                <div class="table-responsive">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Route No</th>
-                                <th>Route Name</th>
-                                <th>Boarding Point</th>
-                            </tr>
-                        </thead>
-                        <tbody id="routesTable">
-                            <tr><td colspan="4" style="text-align: center; color: var(--text-muted);">Loading routes...</td></tr>
-                        </tbody>
-                    </table>
+    <!-- TAB 2: STUDENTS -->
+    <div id="tab-students" class="tab-screen">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    <i class="fa-solid fa-user-plus"></i> Register New Student
                 </div>
             </div>
-        </div>
-
-        <!-- TAB 4: APPLY FOR BUS PASS -->
-        <div id="tab-apply" class="tab-screen">
-            <div class="card" style="max-width: 700px; margin: 0 auto;">
-                <div class="card-header">
-                    <div class="card-title">
-                        <i class="fa-solid fa-address-card"></i> Bus Pass Application Form
-                    </div>
-                </div>
-                <form id="applyForm" onsubmit="handleApplyPass(event)">
-                    <div class="form-grid" style="grid-template-columns: 1fr;">
-                        <div class="form-group">
-                            <label>Select Student *</label>
-                            <select id="applyStudentId" required>
-                                <option value="">-- Choose Student --</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Select Bus Route *</label>
-                            <select id="applyRouteId" onchange="onRouteSelect()" required>
-                                <option value="">-- Choose Route --</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Boarding Point *</label>
-                            <input type="text" id="applyBoarding" placeholder="Specify boarding stop" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Photo Reference URL / ID *</label>
-                            <input type="text" id="applyPhoto" placeholder="https://api.dicebear.com/7.x/avataaars/svg?seed=Sterin" value="https://api.dicebear.com/7.x/avataaars/svg?seed=Student" required>
-                        </div>
-                    </div>
-
-                    <div style="margin-top: 1.5rem;">
-                        <button type="submit" class="btn btn-success" style="width: 100%;">
-                            <i class="fa-solid fa-paper-plane"></i> Submit Bus Pass Application
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <!-- TAB 5: CHECK APPLICATION STATUS -->
-        <div id="tab-status" class="tab-screen">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">
-                        <i class="fa-solid fa-magnifying-glass"></i> Check Application Status
-                    </div>
-                </div>
-                <div class="form-grid" style="grid-template-columns: 1fr 1fr auto;">
+            <form id="studentForm" onsubmit="handleRegisterStudent(event)">
+                <div class="form-grid">
                     <div class="form-group">
-                        <label>Select Registered Student</label>
-                        <select id="statusStudentSelect">
-                            <option value="">-- Select Student --</option>
+                        <label>Full Name *</label>
+                        <input type="text" id="stdName" placeholder="e.g. John Doe" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Register Number *</label>
+                        <input type="text" id="stdReg" placeholder="e.g. 25CC099" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Department *</label>
+                        <input type="text" id="stdDept" placeholder="e.g. CSE / CCE / ECE" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Year *</label>
+                        <select id="stdYear" required>
+                            <option value="1">Year 1</option>
+                            <option value="2" selected>Year 2</option>
+                            <option value="3">Year 3</option>
+                            <option value="4">Year 4</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Or Enter Application ID</label>
-                        <input type="number" id="statusAppIdInput" placeholder="Application ID e.g. 1">
-                    </div>
-                    <div class="form-group" style="justify-content: flex-end;">
-                        <button class="btn" onclick="checkStatus()">
-                            <i class="fa-solid fa-search"></i> Search
-                        </button>
+                        <label>Phone Number *</label>
+                        <input type="text" id="stdPhone" placeholder="e.g. 9876543210" required>
                     </div>
                 </div>
-            </div>
-
-            <div id="statusResultArea">
-                <!-- Dynamic status cards / Digital Bus Pass rendered here -->
-            </div>
-        </div>
-
-        <!-- TAB 6: ADMIN DASHBOARD -->
-        <div id="tab-admin" class="tab-screen">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">
-                        <i class="fa-solid fa-user-shield"></i> Pending Bus Pass Applications
-                    </div>
-                    <button class="btn btn-outline" onclick="loadAdminDashboard()">
-                        <i class="fa-solid fa-arrows-rotate"></i> Refresh Queue
+                <div style="margin-top: 1.25rem;">
+                    <button type="submit" class="btn">
+                        <i class="fa-solid fa-plus"></i> Register Student
                     </button>
                 </div>
-                <div class="table-responsive">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>App ID</th>
-                                <th>Student</th>
-                                <th>Register No</th>
-                                <th>Route</th>
-                                <th>Boarding Stop</th>
-                                <th>Applied Date</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="adminQueueTable">
-                            <tr><td colspan="8" style="text-align: center; color: var(--text-muted);">Loading pending queue...</td></tr>
-                        </tbody>
-                    </table>
+            </form>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    <i class="fa-solid fa-users-viewfinder"></i> Registered Students List
+                </div>
+                <button class="btn btn-outline" onclick="loadStudents()">
+                    <i class="fa-solid fa-arrows-rotate"></i> Refresh
+                </button>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Register No</th>
+                        <th>Department</th>
+                        <th>Year</th>
+                        <th>Phone</th>
+                    </tr>
+                    </thead>
+                    <tbody id="studentsTable">
+                    <tr><td colspan="6" style="text-align: center; color: var(--text-muted);">Loading students...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 3: ROUTES -->
+    <div id="tab-routes" class="tab-screen">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    <i class="fa-solid fa-plus-circle"></i> Add Bus Route
                 </div>
             </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">
-                        <i class="fa-solid fa-triangle-exclamation" style="color: var(--warning);"></i> Passes Expiring Within 30 Days
+            <form id="routeForm" onsubmit="handleAddRoute(event)">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Route Number *</label>
+                        <input type="text" id="rtNumber" placeholder="e.g. R04" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Route Name *</label>
+                        <input type="text" id="rtName" placeholder="e.g. Tirupur - College" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Boarding Point *</label>
+                        <input type="text" id="rtBoarding" placeholder="e.g. Old Bus Stand" required>
                     </div>
                 </div>
-                <div class="table-responsive">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Pass No</th>
-                                <th>Student</th>
-                                <th>Route</th>
-                                <th>Valid Until</th>
-                            </tr>
-                        </thead>
-                        <tbody id="expiringTable">
-                            <tr><td colspan="4" style="text-align: center; color: var(--text-muted);">Loading expiring passes...</td></tr>
-                        </tbody>
-                    </table>
+                <div style="margin-top: 1.25rem;">
+                    <button type="submit" class="btn">
+                        <i class="fa-solid fa-route"></i> Save Route
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    <i class="fa-solid fa-bus"></i> Active Bus Routes
+                </div>
+                <button class="btn btn-outline" onclick="loadRoutes()">
+                    <i class="fa-solid fa-arrows-rotate"></i> Refresh
+                </button>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Route No</th>
+                        <th>Route Name</th>
+                        <th>Boarding Point</th>
+                    </tr>
+                    </thead>
+                    <tbody id="routesTable">
+                    <tr><td colspan="4" style="text-align: center; color: var(--text-muted);">Loading routes...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 4: APPLY FOR BUS PASS -->
+    <div id="tab-apply" class="tab-screen">
+        <div class="card" style="max-width: 700px; margin: 0 auto;">
+            <div class="card-header">
+                <div class="card-title">
+                    <i class="fa-solid fa-address-card"></i> Bus Pass Application Form
+                </div>
+            </div>
+            <form id="applyForm" onsubmit="handleApplyPass(event)">
+                <div class="form-grid" style="grid-template-columns: 1fr;">
+                    <div class="form-group">
+                        <label>Select Student *</label>
+                        <select id="applyStudentId" required>
+                            <option value="">-- Choose Student --</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Select Bus Route *</label>
+                        <select id="applyRouteId" onchange="onRouteSelect()" required>
+                            <option value="">-- Choose Route --</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Boarding Point *</label>
+                        <input type="text" id="applyBoarding" placeholder="Specify boarding stop" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Photo Reference URL / ID *</label>
+                        <input type="text" id="applyPhoto" placeholder="https://api.dicebear.com/7.x/avataaars/svg?seed=Sterin" value="https://api.dicebear.com/7.x/avataaars/svg?seed=Student" required>
+                    </div>
+                </div>
+
+                <div style="margin-top: 1.5rem;">
+                    <button type="submit" class="btn btn-success" style="width: 100%;">
+                        <i class="fa-solid fa-paper-plane"></i> Submit Bus Pass Application
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- TAB 5: CHECK APPLICATION STATUS -->
+    <div id="tab-status" class="tab-screen">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    <i class="fa-solid fa-magnifying-glass"></i> Check Application Status
+                </div>
+            </div>
+            <div class="form-grid" style="grid-template-columns: 1fr 1fr auto;">
+                <div class="form-group">
+                    <label>Select Registered Student</label>
+                    <select id="statusStudentSelect">
+                        <option value="">-- Select Student --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Or Enter Application ID</label>
+                    <input type="number" id="statusAppIdInput" placeholder="Application ID e.g. 1">
+                </div>
+                <div class="form-group" style="justify-content: flex-end;">
+                    <button class="btn" onclick="checkStatus()">
+                        <i class="fa-solid fa-search"></i> Search
+                    </button>
                 </div>
             </div>
         </div>
 
+        <div id="statusResultArea">
+            <!-- Dynamic status cards / Digital Bus Pass rendered here -->
+        </div>
     </div>
 
-    <!-- APPROVE MODAL -->
-    <div class="modal-overlay" id="approveModal">
-        <div class="modal">
-            <div class="modal-header">
-                <div class="modal-title">Approve Bus Pass Application</div>
-                <button class="close-btn" onclick="closeModal('approveModal')">&times;</button>
+    <!-- TAB 6: ADMIN DASHBOARD -->
+    <div id="tab-admin" class="tab-screen">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    <i class="fa-solid fa-user-shield"></i> Pending Bus Pass Applications
+                </div>
+                <button class="btn btn-outline" onclick="loadAdminDashboard()">
+                    <i class="fa-solid fa-arrows-rotate"></i> Refresh Queue
+                </button>
             </div>
-            <input type="hidden" id="approveAppId">
-            <div class="form-group" style="margin-bottom: 1rem;">
-                <label>Validity Duration (Days)</label>
-                <input type="number" id="approveValidity" value="180" min="1">
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>App ID</th>
+                        <th>Student</th>
+                        <th>Register No</th>
+                        <th>Route</th>
+                        <th>Boarding Stop</th>
+                        <th>Applied Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody id="adminQueueTable">
+                    <tr><td colspan="8" style="text-align: center; color: var(--text-muted);">Loading pending queue...</td></tr>
+                    </tbody>
+                </table>
             </div>
-            <div class="form-group" style="margin-bottom: 1.5rem;">
-                <label>Admin Remark (Optional)</label>
-                <input type="text" id="approveRemark" placeholder="e.g. Approved for Semester 1">
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    <i class="fa-solid fa-triangle-exclamation" style="color: var(--warning);"></i> Passes Expiring Within 30 Days
+                </div>
             </div>
-            <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
-                <button class="btn btn-outline" onclick="closeModal('approveModal')">Cancel</button>
-                <button class="btn btn-success" onclick="submitApprove()">Approve & Generate Pass</button>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Pass No</th>
+                        <th>Student</th>
+                        <th>Route</th>
+                        <th>Valid Until</th>
+                    </tr>
+                    </thead>
+                    <tbody id="expiringTable">
+                    <tr><td colspan="4" style="text-align: center; color: var(--text-muted);">Loading expiring passes...</td></tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 
-    <!-- REJECT MODAL -->
-    <div class="modal-overlay" id="rejectModal">
-        <div class="modal">
-            <div class="modal-header">
-                <div class="modal-title" style="color: var(--danger);">Reject Application</div>
-                <button class="close-btn" onclick="closeModal('rejectModal')">&times;</button>
-            </div>
-            <input type="hidden" id="rejectAppId">
-            <div class="form-group" style="margin-bottom: 1rem;">
-                <label>Rejection Reason *</label>
-                <input type="text" id="rejectReason" placeholder="e.g. Invalid document / Route unavailable" required>
-            </div>
-            <div class="form-group" style="margin-bottom: 1.5rem;">
-                <label>Admin Remark (Optional)</label>
-                <input type="text" id="rejectRemark" placeholder="e.g. Please re-apply with valid details">
-            </div>
-            <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
-                <button class="btn btn-outline" onclick="closeModal('rejectModal')">Cancel</button>
-                <button class="btn btn-danger" onclick="submitReject()">Reject Application</button>
-            </div>
+</div>
+
+<!-- APPROVE MODAL -->
+<div class="modal-overlay" id="approveModal">
+    <div class="modal">
+        <div class="modal-header">
+            <div class="modal-title">Approve Bus Pass Application</div>
+            <button class="close-btn" onclick="closeModal('approveModal')">&times;</button>
+        </div>
+        <input type="hidden" id="approveAppId">
+        <div class="form-group" style="margin-bottom: 1rem;">
+            <label>Validity Duration (Days)</label>
+            <input type="number" id="approveValidity" value="180" min="1">
+        </div>
+        <div class="form-group" style="margin-bottom: 1.5rem;">
+            <label>Admin Remark (Optional)</label>
+            <input type="text" id="approveRemark" placeholder="e.g. Approved for Semester 1">
+        </div>
+        <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+            <button class="btn btn-outline" onclick="closeModal('approveModal')">Cancel</button>
+            <button class="btn btn-success" onclick="submitApprove()">Approve & Generate Pass</button>
         </div>
     </div>
+</div>
 
-    <script>
-        const API = '';
+<!-- REJECT MODAL -->
+<div class="modal-overlay" id="rejectModal">
+    <div class="modal">
+        <div class="modal-header">
+            <div class="modal-title" style="color: var(--danger);">Reject Application</div>
+            <button class="close-btn" onclick="closeModal('rejectModal')">&times;</button>
+        </div>
+        <input type="hidden" id="rejectAppId">
+        <div class="form-group" style="margin-bottom: 1rem;">
+            <label>Rejection Reason *</label>
+            <input type="text" id="rejectReason" placeholder="e.g. Invalid document / Route unavailable" required>
+        </div>
+        <div class="form-group" style="margin-bottom: 1.5rem;">
+            <label>Admin Remark (Optional)</label>
+            <input type="text" id="rejectRemark" placeholder="e.g. Please re-apply with valid details">
+        </div>
+        <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+            <button class="btn btn-outline" onclick="closeModal('rejectModal')">Cancel</button>
+            <button class="btn btn-danger" onclick="submitReject()">Reject Application</button>
+        </div>
+    </div>
+</div>
 
-        // Toast Helper
-        function showToast(message, type = 'info') {
-            const container = document.getElementById('toastContainer');
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            const icon = type === 'success' ? 'circle-check' : (type === 'error' ? 'circle-xmark' : 'circle-info');
-            toast.innerHTML = `<i class="fa-solid fa-${icon}" style="font-size: 1.25rem;"></i> <span>${message}</span>`;
-            container.appendChild(toast);
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                setTimeout(() => toast.remove(), 300);
-            }, 3500);
+<script>
+    const API = '';
+
+    // Toast Helper
+    function showToast(message, type = 'info') {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        const icon = type === 'success' ? 'circle-check' : (type === 'error' ? 'circle-xmark' : 'circle-info');
+        toast.innerHTML = `<i class="fa-solid fa-${icon}" style="font-size: 1.25rem;"></i> <span>${message}</span>`;
+        container.appendChild(toast);
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            setTimeout(() => toast.remove(), 300);
+        }, 3500);
+    }
+
+    // Tab Switching
+    function switchTab(tabId) {
+        document.querySelectorAll('.tab-screen').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+
+        document.getElementById(`tab-${tabId}`).classList.add('active');
+
+        const btnMap = {
+            'home': 0, 'students': 1, 'routes': 2, 'apply': 3, 'status': 4, 'admin': 5
+        };
+        const btns = document.querySelectorAll('.nav-btn');
+        if (btns[btnMap[tabId]]) btns[btnMap[tabId]].classList.add('active');
+
+        if (tabId === 'home') loadHomeOverview();
+        if (tabId === 'students') loadStudents();
+        if (tabId === 'routes') loadRoutes();
+        if (tabId === 'apply') prepareApplyForm();
+        if (tabId === 'status') prepareStatusTab();
+        if (tabId === 'admin') loadAdminDashboard();
+        updateStats();
+    }
+
+    // Initial Page Load
+    window.addEventListener('DOMContentLoaded', () => {
+        updateStats();
+        loadHomeOverview();
+    });
+
+    // Global Data Cache
+    let cachedStudents = [];
+    let cachedRoutes = [];
+
+    async function updateStats() {
+        try {
+            const [stRes, rtRes, appRes] = await Promise.all([
+                fetch(`${API}/api/students`),
+                fetch(`${API}/api/routes`),
+                fetch(`${API}/api/applications`)
+            ]);
+
+            cachedStudents = await stRes.json();
+            cachedRoutes = await rtRes.json();
+            const apps = await appRes.json();
+
+            document.getElementById('statStudents').innerText = cachedStudents.length;
+            document.getElementById('statRoutes').innerText = cachedRoutes.length;
+
+            const approved = apps.filter(a => a.status === 'APPROVED').length;
+            const pending = apps.filter(a => a.status === 'PENDING').length;
+
+            document.getElementById('statApproved').innerText = approved;
+            document.getElementById('statPending').innerText = pending;
+        } catch (err) {
+            console.error("Failed to load stats", err);
         }
+    }
 
-        // Tab Switching
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-screen').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
-            
-            document.getElementById(`tab-${tabId}`).classList.add('active');
-            
-            const btnMap = {
-                'home': 0, 'students': 1, 'routes': 2, 'apply': 3, 'status': 4, 'admin': 5
-            };
-            const btns = document.querySelectorAll('.nav-btn');
-            if (btns[btnMap[tabId]]) btns[btnMap[tabId]].classList.add('active');
+    // --- TAB 1: HOME ---
+    async function loadHomeOverview() {
+        try {
+            const res = await fetch(`${API}/api/applications`);
+            const apps = await res.json();
+            const tbody = document.getElementById('homeApplicationsTable');
 
-            if (tabId === 'home') loadHomeOverview();
-            if (tabId === 'students') loadStudents();
-            if (tabId === 'routes') loadRoutes();
-            if (tabId === 'apply') prepareApplyForm();
-            if (tabId === 'status') prepareStatusTab();
-            if (tabId === 'admin') loadAdminDashboard();
-            updateStats();
-        }
-
-        // Initial Page Load
-        window.addEventListener('DOMContentLoaded', () => {
-            updateStats();
-            loadHomeOverview();
-        });
-
-        // Global Data Cache
-        let cachedStudents = [];
-        let cachedRoutes = [];
-
-        async function updateStats() {
-            try {
-                const [stRes, rtRes, appRes] = await Promise.all([
-                    fetch(`${API}/api/students`),
-                    fetch(`${API}/api/routes`),
-                    fetch(`${API}/api/applications`)
-                ]);
-
-                cachedStudents = await stRes.json();
-                cachedRoutes = await rtRes.json();
-                const apps = await appRes.json();
-
-                document.getElementById('statStudents').innerText = cachedStudents.length;
-                document.getElementById('statRoutes').innerText = cachedRoutes.length;
-                
-                const approved = apps.filter(a => a.status === 'APPROVED').length;
-                const pending = apps.filter(a => a.status === 'PENDING').length;
-                
-                document.getElementById('statApproved').innerText = approved;
-                document.getElementById('statPending').innerText = pending;
-            } catch (err) {
-                console.error("Failed to load stats", err);
+            if (apps.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-muted);">No pass applications recorded yet.</td></tr>`;
+                return;
             }
-        }
 
-        // --- TAB 1: HOME ---
-        async function loadHomeOverview() {
-            try {
-                const res = await fetch(`${API}/api/applications`);
-                const apps = await res.json();
-                const tbody = document.getElementById('homeApplicationsTable');
-                
-                if (apps.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-muted);">No pass applications recorded yet.</td></tr>`;
-                    return;
-                }
-
-                tbody.innerHTML = apps.map(app => `
+            tbody.innerHTML = apps.map(app => `
                     <tr>
                         <td><strong>#${app.id}</strong></td>
                         <td>${app.student ? app.student.name : 'N/A'}</td>
@@ -1151,24 +1151,24 @@
                         <td>${app.passNumber || '—'}</td>
                     </tr>
                 `).join('');
-            } catch (err) {
-                showToast('Failed to load home overview', 'error');
-            }
+        } catch (err) {
+            showToast('Failed to load home overview', 'error');
         }
+    }
 
-        // --- TAB 2: STUDENTS ---
-        async function loadStudents() {
-            try {
-                const res = await fetch(`${API}/api/students`);
-                cachedStudents = await res.json();
-                const tbody = document.getElementById('studentsTable');
+    // --- TAB 2: STUDENTS ---
+    async function loadStudents() {
+        try {
+            const res = await fetch(`${API}/api/students`);
+            cachedStudents = await res.json();
+            const tbody = document.getElementById('studentsTable');
 
-                if (cachedStudents.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-muted);">No students registered.</td></tr>`;
-                    return;
-                }
+            if (cachedStudents.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-muted);">No students registered.</td></tr>`;
+                return;
+            }
 
-                tbody.innerHTML = cachedStudents.map(s => `
+            tbody.innerHTML = cachedStudents.map(s => `
                     <tr>
                         <td>#${s.id}</td>
                         <td><strong>${s.name}</strong></td>
@@ -1178,50 +1178,50 @@
                         <td>${s.phone}</td>
                     </tr>
                 `).join('');
-            } catch (err) {
-                showToast('Failed to load students', 'error');
-            }
+        } catch (err) {
+            showToast('Failed to load students', 'error');
         }
+    }
 
-        async function handleRegisterStudent(e) {
-            e.preventDefault();
-            const data = {
-                name: document.getElementById('stdName').value.trim(),
-                registerNumber: document.getElementById('stdReg').value.trim(),
-                department: document.getElementById('stdDept').value.trim(),
-                year: document.getElementById('stdYear').value,
-                phone: document.getElementById('stdPhone').value.trim()
-            };
+    async function handleRegisterStudent(e) {
+        e.preventDefault();
+        const data = {
+            name: document.getElementById('stdName').value.trim(),
+            registerNumber: document.getElementById('stdReg').value.trim(),
+            department: document.getElementById('stdDept').value.trim(),
+            year: document.getElementById('stdYear').value,
+            phone: document.getElementById('stdPhone').value.trim()
+        };
 
-            try {
-                const res = await fetch(`${API}/api/students`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                });
-                if (!res.ok) throw new Error('Registration failed');
-                showToast('Student registered successfully!', 'success');
-                document.getElementById('studentForm').reset();
-                loadStudents();
-                updateStats();
-            } catch (err) {
-                showToast(err.message, 'error');
-            }
+        try {
+            const res = await fetch(`${API}/api/students`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            if (!res.ok) throw new Error('Registration failed');
+            showToast('Student registered successfully!', 'success');
+            document.getElementById('studentForm').reset();
+            loadStudents();
+            updateStats();
+        } catch (err) {
+            showToast(err.message, 'error');
         }
+    }
 
-        // --- TAB 3: ROUTES ---
-        async function loadRoutes() {
-            try {
-                const res = await fetch(`${API}/api/routes`);
-                cachedRoutes = await res.json();
-                const tbody = document.getElementById('routesTable');
+    // --- TAB 3: ROUTES ---
+    async function loadRoutes() {
+        try {
+            const res = await fetch(`${API}/api/routes`);
+            cachedRoutes = await res.json();
+            const tbody = document.getElementById('routesTable');
 
-                if (cachedRoutes.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--text-muted);">No bus routes configured.</td></tr>`;
-                    return;
-                }
+            if (cachedRoutes.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--text-muted);">No bus routes configured.</td></tr>`;
+                return;
+            }
 
-                tbody.innerHTML = cachedRoutes.map(r => `
+            tbody.innerHTML = cachedRoutes.map(r => `
                     <tr>
                         <td>#${r.id}</td>
                         <td><span class="badge badge-pending">${r.routeNumber}</span></td>
@@ -1229,138 +1229,138 @@
                         <td>${r.boardingPoint}</td>
                     </tr>
                 `).join('');
-            } catch (err) {
-                showToast('Failed to load routes', 'error');
+        } catch (err) {
+            showToast('Failed to load routes', 'error');
+        }
+    }
+
+    async function handleAddRoute(e) {
+        e.preventDefault();
+        const data = {
+            routeNumber: document.getElementById('rtNumber').value.trim(),
+            routeName: document.getElementById('rtName').value.trim(),
+            boardingPoint: document.getElementById('rtBoarding').value.trim()
+        };
+
+        try {
+            const res = await fetch(`${API}/api/routes`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            if (!res.ok) throw new Error('Adding route failed');
+            showToast('Bus route added successfully!', 'success');
+            document.getElementById('routeForm').reset();
+            loadRoutes();
+            updateStats();
+        } catch (err) {
+            showToast(err.message, 'error');
+        }
+    }
+
+    // --- TAB 4: APPLY ---
+    async function prepareApplyForm() {
+        await updateStats();
+        const stdSelect = document.getElementById('applyStudentId');
+        const rtSelect = document.getElementById('applyRouteId');
+
+        stdSelect.innerHTML = `<option value="">-- Choose Student --</option>` +
+            cachedStudents.map(s => `<option value="${s.id}">${s.name} (${s.registerNumber}) - ${s.department}</option>`).join('');
+
+        rtSelect.innerHTML = `<option value="">-- Choose Route --</option>` +
+            cachedRoutes.map(r => `<option value="${r.id}">${r.routeNumber}: ${r.routeName}</option>`).join('');
+    }
+
+    function onRouteSelect() {
+        const routeId = document.getElementById('applyRouteId').value;
+        const route = cachedRoutes.find(r => r.id == routeId);
+        if (route) {
+            document.getElementById('applyBoarding').value = route.boardingPoint;
+        }
+    }
+
+    async function handleApplyPass(e) {
+        e.preventDefault();
+        const data = {
+            studentId: parseInt(document.getElementById('applyStudentId').value),
+            routeId: parseInt(document.getElementById('applyRouteId').value),
+            boardingPoint: document.getElementById('applyBoarding').value.trim(),
+            photoReference: document.getElementById('applyPhoto').value.trim()
+        };
+
+        try {
+            const res = await fetch(`${API}/api/applications`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            const result = await res.json();
+            if (!res.ok) {
+                throw new Error(result.message || 'Application submission failed');
             }
+
+            showToast(`Application #${result.id} submitted successfully!`, 'success');
+            document.getElementById('applyForm').reset();
+            updateStats();
+            switchTab('status');
+        } catch (err) {
+            showToast(err.message, 'error');
         }
+    }
 
-        async function handleAddRoute(e) {
-            e.preventDefault();
-            const data = {
-                routeNumber: document.getElementById('rtNumber').value.trim(),
-                routeName: document.getElementById('rtName').value.trim(),
-                boardingPoint: document.getElementById('rtBoarding').value.trim()
-            };
+    // --- TAB 5: CHECK STATUS ---
+    async function prepareStatusTab() {
+        await updateStats();
+        const select = document.getElementById('statusStudentSelect');
+        select.innerHTML = `<option value="">-- Select Student --</option>` +
+            cachedStudents.map(s => `<option value="${s.id}">${s.name} (${s.registerNumber})</option>`).join('');
+    }
 
-            try {
-                const res = await fetch(`${API}/api/routes`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                });
-                if (!res.ok) throw new Error('Adding route failed');
-                showToast('Bus route added successfully!', 'success');
-                document.getElementById('routeForm').reset();
-                loadRoutes();
-                updateStats();
-            } catch (err) {
-                showToast(err.message, 'error');
-            }
-        }
+    async function checkStatus() {
+        const studentId = document.getElementById('statusStudentSelect').value;
+        const appId = document.getElementById('statusAppIdInput').value;
+        const container = document.getElementById('statusResultArea');
+        container.innerHTML = `<div style="text-align:center; padding: 2rem; color: var(--text-muted);">Searching...</div>`;
 
-        // --- TAB 4: APPLY ---
-        async function prepareApplyForm() {
-            await updateStats();
-            const stdSelect = document.getElementById('applyStudentId');
-            const rtSelect = document.getElementById('applyRouteId');
-
-            stdSelect.innerHTML = `<option value="">-- Choose Student --</option>` + 
-                cachedStudents.map(s => `<option value="${s.id}">${s.name} (${s.registerNumber}) - ${s.department}</option>`).join('');
-
-            rtSelect.innerHTML = `<option value="">-- Choose Route --</option>` + 
-                cachedRoutes.map(r => `<option value="${r.id}">${r.routeNumber}: ${r.routeName}</option>`).join('');
-        }
-
-        function onRouteSelect() {
-            const routeId = document.getElementById('applyRouteId').value;
-            const route = cachedRoutes.find(r => r.id == routeId);
-            if (route) {
-                document.getElementById('applyBoarding').value = route.boardingPoint;
-            }
-        }
-
-        async function handleApplyPass(e) {
-            e.preventDefault();
-            const data = {
-                studentId: parseInt(document.getElementById('applyStudentId').value),
-                routeId: parseInt(document.getElementById('applyRouteId').value),
-                boardingPoint: document.getElementById('applyBoarding').value.trim(),
-                photoReference: document.getElementById('applyPhoto').value.trim()
-            };
-
-            try {
-                const res = await fetch(`${API}/api/applications`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                });
-
-                const result = await res.json();
-                if (!res.ok) {
-                    throw new Error(result.message || 'Application submission failed');
+        try {
+            let apps = [];
+            if (appId) {
+                const res = await fetch(`${API}/api/applications/${appId}`);
+                if (res.ok) {
+                    const app = await res.json();
+                    apps = [app];
                 }
-
-                showToast(`Application #${result.id} submitted successfully!`, 'success');
-                document.getElementById('applyForm').reset();
-                updateStats();
-                switchTab('status');
-            } catch (err) {
-                showToast(err.message, 'error');
-            }
-        }
-
-        // --- TAB 5: CHECK STATUS ---
-        async function prepareStatusTab() {
-            await updateStats();
-            const select = document.getElementById('statusStudentSelect');
-            select.innerHTML = `<option value="">-- Select Student --</option>` + 
-                cachedStudents.map(s => `<option value="${s.id}">${s.name} (${s.registerNumber})</option>`).join('');
-        }
-
-        async function checkStatus() {
-            const studentId = document.getElementById('statusStudentSelect').value;
-            const appId = document.getElementById('statusAppIdInput').value;
-            const container = document.getElementById('statusResultArea');
-            container.innerHTML = `<div style="text-align:center; padding: 2rem; color: var(--text-muted);">Searching...</div>`;
-
-            try {
-                let apps = [];
-                if (appId) {
-                    const res = await fetch(`${API}/api/applications/${appId}`);
-                    if (res.ok) {
-                        const app = await res.json();
-                        apps = [app];
-                    }
-                } else if (studentId) {
-                    const res = await fetch(`${API}/api/applications/student/${studentId}`);
-                    if (res.ok) {
-                        apps = await res.json();
-                    }
-                } else {
-                    showToast('Please select a student or enter an Application ID', 'info');
-                    container.innerHTML = '';
-                    return;
+            } else if (studentId) {
+                const res = await fetch(`${API}/api/applications/student/${studentId}`);
+                if (res.ok) {
+                    apps = await res.json();
                 }
+            } else {
+                showToast('Please select a student or enter an Application ID', 'info');
+                container.innerHTML = '';
+                return;
+            }
 
-                if (apps.length === 0) {
-                    container.innerHTML = `
+            if (apps.length === 0) {
+                container.innerHTML = `
                         <div class="card" style="text-align: center; color: var(--text-muted);">
                             <i class="fa-solid fa-folder-open" style="font-size: 2.5rem; margin-bottom: 0.75rem;"></i>
                             <p>No bus pass applications found for your search.</p>
                         </div>
                     `;
-                    return;
-                }
-
-                container.innerHTML = apps.map(app => renderStatusCard(app)).join('');
-            } catch (err) {
-                showToast('Failed to retrieve status', 'error');
+                return;
             }
-        }
 
-        function renderStatusCard(app) {
-            if (app.status === 'APPROVED') {
-                return `
+            container.innerHTML = apps.map(app => renderStatusCard(app)).join('');
+        } catch (err) {
+            showToast('Failed to retrieve status', 'error');
+        }
+    }
+
+    function renderStatusCard(app) {
+        if (app.status === 'APPROVED') {
+            return `
                     <div class="pass-ticket">
                         <div class="pass-header">
                             <div>
@@ -1394,9 +1394,9 @@
                         </div>
                     </div>
                 `;
-            }
+        }
 
-            return `
+        return `
                 <div class="card">
                     <div class="card-header">
                         <div class="card-title">
@@ -1415,24 +1415,24 @@
                     </div>
                 </div>
             `;
-        }
+    }
 
-        // --- TAB 6: ADMIN DASHBOARD ---
-        async function loadAdminDashboard() {
-            try {
-                const [appRes, expRes] = await Promise.all([
-                    fetch(`${API}/api/applications`),
-                    fetch(`${API}/api/applications/expiring/30-days`)
-                ]);
+    // --- TAB 6: ADMIN DASHBOARD ---
+    async function loadAdminDashboard() {
+        try {
+            const [appRes, expRes] = await Promise.all([
+                fetch(`${API}/api/applications`),
+                fetch(`${API}/api/applications/expiring/30-days`)
+            ]);
 
-                const apps = await appRes.json();
-                const expiring = await expRes.json();
+            const apps = await appRes.json();
+            const expiring = await expRes.json();
 
-                const tbody = document.getElementById('adminQueueTable');
-                if (apps.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--text-muted);">No applications in system.</td></tr>`;
-                } else {
-                    tbody.innerHTML = apps.map(app => `
+            const tbody = document.getElementById('adminQueueTable');
+            if (apps.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--text-muted);">No applications in system.</td></tr>`;
+            } else {
+                tbody.innerHTML = apps.map(app => `
                         <tr>
                             <td>#${app.id}</td>
                             <td><strong>${app.student ? app.student.name : 'N/A'}</strong></td>
@@ -1453,13 +1453,13 @@
                             </td>
                         </tr>
                     `).join('');
-                }
+            }
 
-                const expTbody = document.getElementById('expiringTable');
-                if (expiring.length === 0) {
-                    expTbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--text-muted);">No passes expiring in next 30 days.</td></tr>`;
-                } else {
-                    expTbody.innerHTML = expiring.map(p => `
+            const expTbody = document.getElementById('expiringTable');
+            if (expiring.length === 0) {
+                expTbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--text-muted);">No passes expiring in next 30 days.</td></tr>`;
+            } else {
+                expTbody.innerHTML = expiring.map(p => `
                         <tr>
                             <td><strong style="color: var(--secondary);">${p.passNumber}</strong></td>
                             <td>${p.student ? p.student.name : ''}</td>
@@ -1467,73 +1467,73 @@
                             <td><span style="color: var(--warning); font-weight: 700;">${p.validUntil}</span></td>
                         </tr>
                     `).join('');
-                }
-            } catch (err) {
-                showToast('Failed to load admin queue', 'error');
             }
+        } catch (err) {
+            showToast('Failed to load admin queue', 'error');
+        }
+    }
+
+    // Modals
+    function openApproveModal(id) {
+        document.getElementById('approveAppId').value = id;
+        document.getElementById('approveModal').classList.add('active');
+    }
+
+    function openRejectModal(id) {
+        document.getElementById('rejectAppId').value = id;
+        document.getElementById('rejectModal').classList.add('active');
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).classList.remove('active');
+    }
+
+    async function submitApprove() {
+        const id = document.getElementById('approveAppId').value;
+        const validityDays = parseInt(document.getElementById('approveValidity').value) || 180;
+        const remark = document.getElementById('approveRemark').value.trim();
+
+        try {
+            const res = await fetch(`${API}/api/applications/${id}/approve`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ validityDays, remark })
+            });
+            if (!res.ok) throw new Error('Approve failed');
+            showToast(`Application #${id} approved successfully!`, 'success');
+            closeModal('approveModal');
+            loadAdminDashboard();
+            updateStats();
+        } catch (err) {
+            showToast(err.message, 'error');
+        }
+    }
+
+    async function submitReject() {
+        const id = document.getElementById('rejectAppId').value;
+        const rejectionReason = document.getElementById('rejectReason').value.trim();
+        const remark = document.getElementById('rejectRemark').value.trim();
+
+        if (!rejectionReason) {
+            showToast('Rejection reason is required', 'error');
+            return;
         }
 
-        // Modals
-        function openApproveModal(id) {
-            document.getElementById('approveAppId').value = id;
-            document.getElementById('approveModal').classList.add('active');
+        try {
+            const res = await fetch(`${API}/api/applications/${id}/reject`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ rejectionReason, remark })
+            });
+            if (!res.ok) throw new Error('Reject failed');
+            showToast(`Application #${id} rejected`, 'info');
+            closeModal('rejectModal');
+            loadAdminDashboard();
+            updateStats();
+        } catch (err) {
+            showToast(err.message, 'error');
         }
-
-        function openRejectModal(id) {
-            document.getElementById('rejectAppId').value = id;
-            document.getElementById('rejectModal').classList.add('active');
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('active');
-        }
-
-        async function submitApprove() {
-            const id = document.getElementById('approveAppId').value;
-            const validityDays = parseInt(document.getElementById('approveValidity').value) || 180;
-            const remark = document.getElementById('approveRemark').value.trim();
-
-            try {
-                const res = await fetch(`${API}/api/applications/${id}/approve`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ validityDays, remark })
-                });
-                if (!res.ok) throw new Error('Approve failed');
-                showToast(`Application #${id} approved successfully!`, 'success');
-                closeModal('approveModal');
-                loadAdminDashboard();
-                updateStats();
-            } catch (err) {
-                showToast(err.message, 'error');
-            }
-        }
-
-        async function submitReject() {
-            const id = document.getElementById('rejectAppId').value;
-            const rejectionReason = document.getElementById('rejectReason').value.trim();
-            const remark = document.getElementById('rejectRemark').value.trim();
-
-            if (!rejectionReason) {
-                showToast('Rejection reason is required', 'error');
-                return;
-            }
-
-            try {
-                const res = await fetch(`${API}/api/applications/${id}/reject`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ rejectionReason, remark })
-                });
-                if (!res.ok) throw new Error('Reject failed');
-                showToast(`Application #${id} rejected`, 'info');
-                closeModal('rejectModal');
-                loadAdminDashboard();
-                updateStats();
-            } catch (err) {
-                showToast(err.message, 'error');
-            }
-        }
-    </script>
+    }
+</script>
 </body>
 </html>

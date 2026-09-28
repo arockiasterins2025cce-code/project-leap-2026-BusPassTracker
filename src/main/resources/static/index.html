@@ -1,0 +1,1539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BusPass - Student Bus Pass Tracker</title>
+    <!-- Google Fonts & FontAwesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --primary-light: #e0e7ff;
+            --secondary: #06b6d4;
+            --accent: #8b5cf6;
+            --bg-dark: #0f172a;
+            --card-dark: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(79, 70, 229, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.15) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--text-main);
+        }
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+
+        .brand-text h1 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            background: linear-gradient(to right, #ffffff, #cbd5e1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-text p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.5rem;
+            background: rgba(15, 23, 42, 0.6);
+            padding: 0.35rem;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 0.6rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-btn:hover {
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-btn.active {
+            background: var(--primary);
+            color: #ffffff;
+            box-shadow: 0 2px 8px rgba(79, 70, 229, 0.4);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1280px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            flex: 1;
+            width: 100%;
+        }
+
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .toast {
+            background: var(--card-dark);
+            border: 1px solid var(--border-color);
+            padding: 1rem 1.25rem;
+            border-radius: var(--radius-md);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            min-width: 300px;
+            animation: slideIn 0.3s ease forwards;
+        }
+
+        .toast.success { border-left: 4px solid var(--success); }
+        .toast.error { border-left: 4px solid var(--danger); }
+        .toast.info { border-left: 4px solid var(--primary); }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Stats Section */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--card-dark);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.03));
+            pointer-events: none;
+        }
+
+        .stat-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .stat-students { background: rgba(79, 70, 229, 0.15); color: #818cf8; }
+        .stat-routes { background: rgba(6, 182, 212, 0.15); color: #22d3ee; }
+        .stat-active { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+        .stat-pending { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+
+        .stat-info h3 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .stat-info p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* Tab Content Screens */
+        .tab-screen {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Cards & Section Containers */
+        .card {
+            background: var(--card-dark);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 1.75rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .card-title i {
+            color: var(--primary);
+        }
+
+        /* Forms */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        input, select, textarea {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-md);
+            font-size: 0.95rem;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+        }
+
+        /* Buttons */
+        .btn {
+            background: var(--primary);
+            color: #ffffff;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-success { background: var(--success); }
+        .btn-success:hover { background: #059669; }
+
+        .btn-danger { background: var(--danger); }
+        .btn-danger:hover { background: #dc2626; }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--text-muted);
+        }
+
+        /* Tables */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            background: rgba(15, 23, 42, 0.5);
+            padding: 1rem;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            vertical-align: middle;
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        /* Status Badges */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-pending { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+        .badge-approved { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .badge-rejected { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+
+        /* Digital Bus Pass Card */
+        .pass-ticket {
+            background: linear-gradient(135deg, #1e1b4b, #312e81);
+            border: 2px solid #6366f1;
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 500px;
+            margin: 2rem auto;
+            position: relative;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+
+        .pass-ticket::before {
+            content: 'STUDENT BUS PASS';
+            position: absolute;
+            top: -15px;
+            right: -25px;
+            font-size: 3rem;
+            font-weight: 900;
+            color: rgba(255, 255, 255, 0.03);
+            white-space: nowrap;
+            pointer-events: none;
+        }
+
+        .pass-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
+            padding-bottom: 1rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .pass-number {
+            font-family: monospace;
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #38bdf8;
+            background: rgba(56, 189, 248, 0.1);
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+        }
+
+        .pass-body {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .pass-photo {
+            width: 90px;
+            height: 90px;
+            border-radius: 16px;
+            object-fit: cover;
+            border: 2px solid #818cf8;
+            background: #0f172a;
+        }
+
+        .pass-details {
+            flex: 1;
+        }
+
+        .pass-name {
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-bottom: 0.2rem;
+            color: #ffffff;
+        }
+
+        .pass-meta {
+            font-size: 0.85rem;
+            color: #cbd5e1;
+            margin-bottom: 0.6rem;
+        }
+
+        .pass-route-box {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 10px;
+            padding: 0.75rem;
+            margin-top: 1rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .pass-route-box span {
+            color: #94a3b8;
+            display: block;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+        }
+
+        .pass-footer {
+            margin-top: 1.25rem;
+            padding-top: 1rem;
+            border-top: 1px dashed rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: #a5b4fc;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            z-index: 500;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--card-dark);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            width: 90%;
+            max-width: 500px;
+            padding: 1.75rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+        }
+
+        .modal-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+
+        .close-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.25rem;
+            cursor: pointer;
+        }
+
+        /* Hero Banner */
+        .hero {
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.2), rgba(6, 182, 212, 0.1));
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem 2rem;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .hero-text h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(to right, #ffffff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-text p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            max-width: 600px;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-container { flex-direction: column; gap: 1rem; }
+            .nav-links { width: 100%; overflow-x: auto; }
+            .hero { flex-direction: column; text-align: center; }
+            .hero-text p { margin: 0 auto 1.5rem; }
+            .hero-actions { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Header -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="brand">
+                <div class="brand-icon">
+                    <i class="fa-solid fa-bus-simple"></i>
+                </div>
+                <div class="brand-text">
+                    <h1>BusPass</h1>
+                    <p>Student Bus Pass Application Tracker</p>
+                </div>
+            </a>
+            <div class="nav-links">
+                <button class="nav-btn active" onclick="switchTab('home')">
+                    <i class="fa-solid fa-house"></i> Home
+                </button>
+                <button class="nav-btn" onclick="switchTab('students')">
+                    <i class="fa-solid fa-user-graduate"></i> Students
+                </button>
+                <button class="nav-btn" onclick="switchTab('routes')">
+                    <i class="fa-solid fa-route"></i> Routes
+                </button>
+                <button class="nav-btn" onclick="switchTab('apply')">
+                    <i class="fa-solid fa-file-signature"></i> Apply Pass
+                </button>
+                <button class="nav-btn" onclick="switchTab('status')">
+                    <i class="fa-solid fa-id-card"></i> Check Status
+                </button>
+                <button class="nav-btn" onclick="switchTab('admin')">
+                    <i class="fa-solid fa-user-shield"></i> Admin
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Toast Notifications Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Main Content Area -->
+    <div class="container">
+
+        <!-- STATS BAR -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon stat-students">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="statStudents">0</h3>
+                    <p>Registered Students</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon stat-routes">
+                    <i class="fa-solid fa-map-location-dot"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="statRoutes">0</h3>
+                    <p>Active Routes</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon stat-active">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="statApproved">0</h3>
+                    <p>Approved Passes</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon stat-pending">
+                    <i class="fa-solid fa-clock"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="statPending">0</h3>
+                    <p>Pending Review</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 1: HOME OVERVIEW -->
+        <div id="tab-home" class="tab-screen active">
+            <div class="hero">
+                <div class="hero-text">
+                    <h2>Student Bus Pass Application Tracker</h2>
+                    <p>Streamlined college transportation management system. Register students, apply for bus passes online, track real-time approval status, and manage active routes effortlessly.</p>
+                    <div class="hero-actions">
+                        <button class="btn" onclick="switchTab('apply')">
+                            <i class="fa-solid fa-paper-plane"></i> Apply for Pass Now
+                        </button>
+                        <button class="btn btn-outline" onclick="switchTab('status')">
+                            <i class="fa-solid fa-magnifying-glass"></i> Check Status
+                        </button>
+                    </div>
+                </div>
+                <div>
+                    <i class="fa-solid fa-bus-simple" style="font-size: 8rem; color: rgba(255, 255, 255, 0.15);"></i>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fa-solid fa-bell"></i> Recent Applications Overview
+                    </div>
+                    <button class="btn btn-outline" onclick="loadHomeOverview()">
+                        <i class="fa-solid fa-arrows-rotate"></i> Refresh
+                    </button>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>App ID</th>
+                                <th>Student</th>
+                                <th>Register No</th>
+                                <th>Route</th>
+                                <th>Boarding Point</th>
+                                <th>Status</th>
+                                <th>Pass No</th>
+                            </tr>
+                        </thead>
+                        <tbody id="homeApplicationsTable">
+                            <tr><td colspan="7" style="text-align: center; color: var(--text-muted);">Loading applications...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: STUDENTS -->
+        <div id="tab-students" class="tab-screen">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fa-solid fa-user-plus"></i> Register New Student
+                    </div>
+                </div>
+                <form id="studentForm" onsubmit="handleRegisterStudent(event)">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Full Name *</label>
+                            <input type="text" id="stdName" placeholder="e.g. John Doe" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Register Number *</label>
+                            <input type="text" id="stdReg" placeholder="e.g. 25CC099" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Department *</label>
+                            <input type="text" id="stdDept" placeholder="e.g. CSE / CCE / ECE" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Year *</label>
+                            <select id="stdYear" required>
+                                <option value="1">Year 1</option>
+                                <option value="2" selected>Year 2</option>
+                                <option value="3">Year 3</option>
+                                <option value="4">Year 4</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number *</label>
+                            <input type="text" id="stdPhone" placeholder="e.g. 9876543210" required>
+                        </div>
+                    </div>
+                    <div style="margin-top: 1.25rem;">
+                        <button type="submit" class="btn">
+                            <i class="fa-solid fa-plus"></i> Register Student
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fa-solid fa-users-viewfinder"></i> Registered Students List
+                    </div>
+                    <button class="btn btn-outline" onclick="loadStudents()">
+                        <i class="fa-solid fa-arrows-rotate"></i> Refresh
+                    </button>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Register No</th>
+                                <th>Department</th>
+                                <th>Year</th>
+                                <th>Phone</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentsTable">
+                            <tr><td colspan="6" style="text-align: center; color: var(--text-muted);">Loading students...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: ROUTES -->
+        <div id="tab-routes" class="tab-screen">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fa-solid fa-plus-circle"></i> Add Bus Route
+                    </div>
+                </div>
+                <form id="routeForm" onsubmit="handleAddRoute(event)">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Route Number *</label>
+                            <input type="text" id="rtNumber" placeholder="e.g. R04" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Route Name *</label>
+                            <input type="text" id="rtName" placeholder="e.g. Tirupur - College" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Boarding Point *</label>
+                            <input type="text" id="rtBoarding" placeholder="e.g. Old Bus Stand" required>
+                        </div>
+                    </div>
+                    <div style="margin-top: 1.25rem;">
+                        <button type="submit" class="btn">
+                            <i class="fa-solid fa-route"></i> Save Route
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fa-solid fa-bus"></i> Active Bus Routes
+                    </div>
+                    <button class="btn btn-outline" onclick="loadRoutes()">
+                        <i class="fa-solid fa-arrows-rotate"></i> Refresh
+                    </button>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Route No</th>
+                                <th>Route Name</th>
+                                <th>Boarding Point</th>
+                            </tr>
+                        </thead>
+                        <tbody id="routesTable">
+                            <tr><td colspan="4" style="text-align: center; color: var(--text-muted);">Loading routes...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: APPLY FOR BUS PASS -->
+        <div id="tab-apply" class="tab-screen">
+            <div class="card" style="max-width: 700px; margin: 0 auto;">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fa-solid fa-address-card"></i> Bus Pass Application Form
+                    </div>
+                </div>
+                <form id="applyForm" onsubmit="handleApplyPass(event)">
+                    <div class="form-grid" style="grid-template-columns: 1fr;">
+                        <div class="form-group">
+                            <label>Select Student *</label>
+                            <select id="applyStudentId" required>
+                                <option value="">-- Choose Student --</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Select Bus Route *</label>
+                            <select id="applyRouteId" onchange="onRouteSelect()" required>
+                                <option value="">-- Choose Route --</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Boarding Point *</label>
+                            <input type="text" id="applyBoarding" placeholder="Specify boarding stop" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Photo Reference URL / ID *</label>
+                            <input type="text" id="applyPhoto" placeholder="https://api.dicebear.com/7.x/avataaars/svg?seed=Sterin" value="https://api.dicebear.com/7.x/avataaars/svg?seed=Student" required>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 1.5rem;">
+                        <button type="submit" class="btn btn-success" style="width: 100%;">
+                            <i class="fa-solid fa-paper-plane"></i> Submit Bus Pass Application
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- TAB 5: CHECK APPLICATION STATUS -->
+        <div id="tab-status" class="tab-screen">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fa-solid fa-magnifying-glass"></i> Check Application Status
+                    </div>
+                </div>
+                <div class="form-grid" style="grid-template-columns: 1fr 1fr auto;">
+                    <div class="form-group">
+                        <label>Select Registered Student</label>
+                        <select id="statusStudentSelect">
+                            <option value="">-- Select Student --</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Or Enter Application ID</label>
+                        <input type="number" id="statusAppIdInput" placeholder="Application ID e.g. 1">
+                    </div>
+                    <div class="form-group" style="justify-content: flex-end;">
+                        <button class="btn" onclick="checkStatus()">
+                            <i class="fa-solid fa-search"></i> Search
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="statusResultArea">
+                <!-- Dynamic status cards / Digital Bus Pass rendered here -->
+            </div>
+        </div>
+
+        <!-- TAB 6: ADMIN DASHBOARD -->
+        <div id="tab-admin" class="tab-screen">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fa-solid fa-user-shield"></i> Pending Bus Pass Applications
+                    </div>
+                    <button class="btn btn-outline" onclick="loadAdminDashboard()">
+                        <i class="fa-solid fa-arrows-rotate"></i> Refresh Queue
+                    </button>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>App ID</th>
+                                <th>Student</th>
+                                <th>Register No</th>
+                                <th>Route</th>
+                                <th>Boarding Stop</th>
+                                <th>Applied Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminQueueTable">
+                            <tr><td colspan="8" style="text-align: center; color: var(--text-muted);">Loading pending queue...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fa-solid fa-triangle-exclamation" style="color: var(--warning);"></i> Passes Expiring Within 30 Days
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Pass No</th>
+                                <th>Student</th>
+                                <th>Route</th>
+                                <th>Valid Until</th>
+                            </tr>
+                        </thead>
+                        <tbody id="expiringTable">
+                            <tr><td colspan="4" style="text-align: center; color: var(--text-muted);">Loading expiring passes...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- APPROVE MODAL -->
+    <div class="modal-overlay" id="approveModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">Approve Bus Pass Application</div>
+                <button class="close-btn" onclick="closeModal('approveModal')">&times;</button>
+            </div>
+            <input type="hidden" id="approveAppId">
+            <div class="form-group" style="margin-bottom: 1rem;">
+                <label>Validity Duration (Days)</label>
+                <input type="number" id="approveValidity" value="180" min="1">
+            </div>
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+                <label>Admin Remark (Optional)</label>
+                <input type="text" id="approveRemark" placeholder="e.g. Approved for Semester 1">
+            </div>
+            <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+                <button class="btn btn-outline" onclick="closeModal('approveModal')">Cancel</button>
+                <button class="btn btn-success" onclick="submitApprove()">Approve & Generate Pass</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- REJECT MODAL -->
+    <div class="modal-overlay" id="rejectModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title" style="color: var(--danger);">Reject Application</div>
+                <button class="close-btn" onclick="closeModal('rejectModal')">&times;</button>
+            </div>
+            <input type="hidden" id="rejectAppId">
+            <div class="form-group" style="margin-bottom: 1rem;">
+                <label>Rejection Reason *</label>
+                <input type="text" id="rejectReason" placeholder="e.g. Invalid document / Route unavailable" required>
+            </div>
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+                <label>Admin Remark (Optional)</label>
+                <input type="text" id="rejectRemark" placeholder="e.g. Please re-apply with valid details">
+            </div>
+            <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+                <button class="btn btn-outline" onclick="closeModal('rejectModal')">Cancel</button>
+                <button class="btn btn-danger" onclick="submitReject()">Reject Application</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API = '';
+
+        // Toast Helper
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            const icon = type === 'success' ? 'circle-check' : (type === 'error' ? 'circle-xmark' : 'circle-info');
+            toast.innerHTML = `<i class="fa-solid fa-${icon}" style="font-size: 1.25rem;"></i> <span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        // Tab Switching
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-screen').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+            
+            const btnMap = {
+                'home': 0, 'students': 1, 'routes': 2, 'apply': 3, 'status': 4, 'admin': 5
+            };
+            const btns = document.querySelectorAll('.nav-btn');
+            if (btns[btnMap[tabId]]) btns[btnMap[tabId]].classList.add('active');
+
+            if (tabId === 'home') loadHomeOverview();
+            if (tabId === 'students') loadStudents();
+            if (tabId === 'routes') loadRoutes();
+            if (tabId === 'apply') prepareApplyForm();
+            if (tabId === 'status') prepareStatusTab();
+            if (tabId === 'admin') loadAdminDashboard();
+            updateStats();
+        }
+
+        // Initial Page Load
+        window.addEventListener('DOMContentLoaded', () => {
+            updateStats();
+            loadHomeOverview();
+        });
+
+        // Global Data Cache
+        let cachedStudents = [];
+        let cachedRoutes = [];
+
+        async function updateStats() {
+            try {
+                const [stRes, rtRes, appRes] = await Promise.all([
+                    fetch(`${API}/api/students`),
+                    fetch(`${API}/api/routes`),
+                    fetch(`${API}/api/applications`)
+                ]);
+
+                cachedStudents = await stRes.json();
+                cachedRoutes = await rtRes.json();
+                const apps = await appRes.json();
+
+                document.getElementById('statStudents').innerText = cachedStudents.length;
+                document.getElementById('statRoutes').innerText = cachedRoutes.length;
+                
+                const approved = apps.filter(a => a.status === 'APPROVED').length;
+                const pending = apps.filter(a => a.status === 'PENDING').length;
+                
+                document.getElementById('statApproved').innerText = approved;
+                document.getElementById('statPending').innerText = pending;
+            } catch (err) {
+                console.error("Failed to load stats", err);
+            }
+        }
+
+        // --- TAB 1: HOME ---
+        async function loadHomeOverview() {
+            try {
+                const res = await fetch(`${API}/api/applications`);
+                const apps = await res.json();
+                const tbody = document.getElementById('homeApplicationsTable');
+                
+                if (apps.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-muted);">No pass applications recorded yet.</td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = apps.map(app => `
+                    <tr>
+                        <td><strong>#${app.id}</strong></td>
+                        <td>${app.student ? app.student.name : 'N/A'}</td>
+                        <td>${app.student ? app.student.registerNumber : 'N/A'}</td>
+                        <td>${app.route ? app.route.routeName : 'N/A'}</td>
+                        <td>${app.boardingPoint || 'N/A'}</td>
+                        <td><span class="badge badge-${app.status.toLowerCase()}">${app.status}</span></td>
+                        <td>${app.passNumber || '—'}</td>
+                    </tr>
+                `).join('');
+            } catch (err) {
+                showToast('Failed to load home overview', 'error');
+            }
+        }
+
+        // --- TAB 2: STUDENTS ---
+        async function loadStudents() {
+            try {
+                const res = await fetch(`${API}/api/students`);
+                cachedStudents = await res.json();
+                const tbody = document.getElementById('studentsTable');
+
+                if (cachedStudents.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-muted);">No students registered.</td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = cachedStudents.map(s => `
+                    <tr>
+                        <td>#${s.id}</td>
+                        <td><strong>${s.name}</strong></td>
+                        <td><code>${s.registerNumber}</code></td>
+                        <td>${s.department}</td>
+                        <td>Year ${s.year}</td>
+                        <td>${s.phone}</td>
+                    </tr>
+                `).join('');
+            } catch (err) {
+                showToast('Failed to load students', 'error');
+            }
+        }
+
+        async function handleRegisterStudent(e) {
+            e.preventDefault();
+            const data = {
+                name: document.getElementById('stdName').value.trim(),
+                registerNumber: document.getElementById('stdReg').value.trim(),
+                department: document.getElementById('stdDept').value.trim(),
+                year: document.getElementById('stdYear').value,
+                phone: document.getElementById('stdPhone').value.trim()
+            };
+
+            try {
+                const res = await fetch(`${API}/api/students`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                if (!res.ok) throw new Error('Registration failed');
+                showToast('Student registered successfully!', 'success');
+                document.getElementById('studentForm').reset();
+                loadStudents();
+                updateStats();
+            } catch (err) {
+                showToast(err.message, 'error');
+            }
+        }
+
+        // --- TAB 3: ROUTES ---
+        async function loadRoutes() {
+            try {
+                const res = await fetch(`${API}/api/routes`);
+                cachedRoutes = await res.json();
+                const tbody = document.getElementById('routesTable');
+
+                if (cachedRoutes.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--text-muted);">No bus routes configured.</td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = cachedRoutes.map(r => `
+                    <tr>
+                        <td>#${r.id}</td>
+                        <td><span class="badge badge-pending">${r.routeNumber}</span></td>
+                        <td><strong>${r.routeName}</strong></td>
+                        <td>${r.boardingPoint}</td>
+                    </tr>
+                `).join('');
+            } catch (err) {
+                showToast('Failed to load routes', 'error');
+            }
+        }
+
+        async function handleAddRoute(e) {
+            e.preventDefault();
+            const data = {
+                routeNumber: document.getElementById('rtNumber').value.trim(),
+                routeName: document.getElementById('rtName').value.trim(),
+                boardingPoint: document.getElementById('rtBoarding').value.trim()
+            };
+
+            try {
+                const res = await fetch(`${API}/api/routes`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                if (!res.ok) throw new Error('Adding route failed');
+                showToast('Bus route added successfully!', 'success');
+                document.getElementById('routeForm').reset();
+                loadRoutes();
+                updateStats();
+            } catch (err) {
+                showToast(err.message, 'error');
+            }
+        }
+
+        // --- TAB 4: APPLY ---
+        async function prepareApplyForm() {
+            await updateStats();
+            const stdSelect = document.getElementById('applyStudentId');
+            const rtSelect = document.getElementById('applyRouteId');
+
+            stdSelect.innerHTML = `<option value="">-- Choose Student --</option>` + 
+                cachedStudents.map(s => `<option value="${s.id}">${s.name} (${s.registerNumber}) - ${s.department}</option>`).join('');
+
+            rtSelect.innerHTML = `<option value="">-- Choose Route --</option>` + 
+                cachedRoutes.map(r => `<option value="${r.id}">${r.routeNumber}: ${r.routeName}</option>`).join('');
+        }
+
+        function onRouteSelect() {
+            const routeId = document.getElementById('applyRouteId').value;
+            const route = cachedRoutes.find(r => r.id == routeId);
+            if (route) {
+                document.getElementById('applyBoarding').value = route.boardingPoint;
+            }
+        }
+
+        async function handleApplyPass(e) {
+            e.preventDefault();
+            const data = {
+                studentId: parseInt(document.getElementById('applyStudentId').value),
+                routeId: parseInt(document.getElementById('applyRouteId').value),
+                boardingPoint: document.getElementById('applyBoarding').value.trim(),
+                photoReference: document.getElementById('applyPhoto').value.trim()
+            };
+
+            try {
+                const res = await fetch(`${API}/api/applications`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await res.json();
+                if (!res.ok) {
+                    throw new Error(result.message || 'Application submission failed');
+                }
+
+                showToast(`Application #${result.id} submitted successfully!`, 'success');
+                document.getElementById('applyForm').reset();
+                updateStats();
+                switchTab('status');
+            } catch (err) {
+                showToast(err.message, 'error');
+            }
+        }
+
+        // --- TAB 5: CHECK STATUS ---
+        async function prepareStatusTab() {
+            await updateStats();
+            const select = document.getElementById('statusStudentSelect');
+            select.innerHTML = `<option value="">-- Select Student --</option>` + 
+                cachedStudents.map(s => `<option value="${s.id}">${s.name} (${s.registerNumber})</option>`).join('');
+        }
+
+        async function checkStatus() {
+            const studentId = document.getElementById('statusStudentSelect').value;
+            const appId = document.getElementById('statusAppIdInput').value;
+            const container = document.getElementById('statusResultArea');
+            container.innerHTML = `<div style="text-align:center; padding: 2rem; color: var(--text-muted);">Searching...</div>`;
+
+            try {
+                let apps = [];
+                if (appId) {
+                    const res = await fetch(`${API}/api/applications/${appId}`);
+                    if (res.ok) {
+                        const app = await res.json();
+                        apps = [app];
+                    }
+                } else if (studentId) {
+                    const res = await fetch(`${API}/api/applications/student/${studentId}`);
+                    if (res.ok) {
+                        apps = await res.json();
+                    }
+                } else {
+                    showToast('Please select a student or enter an Application ID', 'info');
+                    container.innerHTML = '';
+                    return;
+                }
+
+                if (apps.length === 0) {
+                    container.innerHTML = `
+                        <div class="card" style="text-align: center; color: var(--text-muted);">
+                            <i class="fa-solid fa-folder-open" style="font-size: 2.5rem; margin-bottom: 0.75rem;"></i>
+                            <p>No bus pass applications found for your search.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = apps.map(app => renderStatusCard(app)).join('');
+            } catch (err) {
+                showToast('Failed to retrieve status', 'error');
+            }
+        }
+
+        function renderStatusCard(app) {
+            if (app.status === 'APPROVED') {
+                return `
+                    <div class="pass-ticket">
+                        <div class="pass-header">
+                            <div>
+                                <span class="badge badge-approved"><i class="fa-solid fa-shield-check"></i> OFFICIAL PASS</span>
+                            </div>
+                            <div class="pass-number">${app.passNumber}</div>
+                        </div>
+                        <div class="pass-body">
+                            <img class="pass-photo" src="${app.photoReference || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + app.student.name}" alt="Student Photo">
+                            <div class="pass-details">
+                                <div class="pass-name">${app.student ? app.student.name : 'N/A'}</div>
+                                <div class="pass-meta">Reg: ${app.student ? app.student.registerNumber : ''} | Dept: ${app.student ? app.student.department : ''}</div>
+                                <div style="font-size: 0.8rem; color: #a5b4fc;"><i class="fa-solid fa-phone"></i> ${app.student ? app.student.phone : ''}</div>
+                            </div>
+                        </div>
+                        <div class="pass-route-box">
+                            <div>
+                                <span>BUS ROUTE</span>
+                                <strong>${app.route ? app.route.routeNumber + ': ' + app.route.routeName : 'N/A'}</strong>
+                            </div>
+                            <div>
+                                <span>BOARDING POINT</span>
+                                <strong>${app.boardingPoint}</strong>
+                            </div>
+                        </div>
+                        <div class="pass-footer">
+                            <div><i class="fa-regular fa-calendar-check"></i> Valid: ${app.validFrom || ''} to ${app.validUntil || ''}</div>
+                            <button class="btn btn-outline" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;" onclick="window.print()">
+                                <i class="fa-solid fa-print"></i> Print
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            return `
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            Application #${app.id} Details
+                        </div>
+                        <span class="badge badge-${app.status.toLowerCase()}">${app.status}</span>
+                    </div>
+                    <div class="form-grid">
+                        <div><label>Student Name</label><p><strong>${app.student ? app.student.name : 'N/A'}</strong></p></div>
+                        <div><label>Register No</label><p>${app.student ? app.student.registerNumber : 'N/A'}</p></div>
+                        <div><label>Bus Route</label><p>${app.route ? app.route.routeName : 'N/A'}</p></div>
+                        <div><label>Boarding Stop</label><p>${app.boardingPoint}</p></div>
+                        <div><label>Applied Date</label><p>${app.appliedDate || 'N/A'}</p></div>
+                        ${app.rejectionReason ? `<div class="full-width" style="color: var(--danger);"><label>Rejection Reason</label><p>${app.rejectionReason}</p></div>` : ''}
+                        ${app.adminRemark ? `<div class="full-width"><label>Admin Remark</label><p>${app.adminRemark}</p></div>` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        // --- TAB 6: ADMIN DASHBOARD ---
+        async function loadAdminDashboard() {
+            try {
+                const [appRes, expRes] = await Promise.all([
+                    fetch(`${API}/api/applications`),
+                    fetch(`${API}/api/applications/expiring/30-days`)
+                ]);
+
+                const apps = await appRes.json();
+                const expiring = await expRes.json();
+
+                const tbody = document.getElementById('adminQueueTable');
+                if (apps.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--text-muted);">No applications in system.</td></tr>`;
+                } else {
+                    tbody.innerHTML = apps.map(app => `
+                        <tr>
+                            <td>#${app.id}</td>
+                            <td><strong>${app.student ? app.student.name : 'N/A'}</strong></td>
+                            <td><code>${app.student ? app.student.registerNumber : 'N/A'}</code></td>
+                            <td>${app.route ? app.route.routeNumber : ''}</td>
+                            <td>${app.boardingPoint}</td>
+                            <td>${app.appliedDate || ''}</td>
+                            <td><span class="badge badge-${app.status.toLowerCase()}">${app.status}</span></td>
+                            <td>
+                                ${app.status === 'PENDING' ? `
+                                    <button class="btn btn-success" style="padding: 0.35rem 0.6rem; font-size: 0.75rem;" onclick="openApproveModal(${app.id})">
+                                        <i class="fa-solid fa-check"></i> Approve
+                                    </button>
+                                    <button class="btn btn-danger" style="padding: 0.35rem 0.6rem; font-size: 0.75rem;" onclick="openRejectModal(${app.id})">
+                                        <i class="fa-solid fa-xmark"></i> Reject
+                                    </button>
+                                ` : '—'}
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+
+                const expTbody = document.getElementById('expiringTable');
+                if (expiring.length === 0) {
+                    expTbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--text-muted);">No passes expiring in next 30 days.</td></tr>`;
+                } else {
+                    expTbody.innerHTML = expiring.map(p => `
+                        <tr>
+                            <td><strong style="color: var(--secondary);">${p.passNumber}</strong></td>
+                            <td>${p.student ? p.student.name : ''}</td>
+                            <td>${p.route ? p.route.routeName : ''}</td>
+                            <td><span style="color: var(--warning); font-weight: 700;">${p.validUntil}</span></td>
+                        </tr>
+                    `).join('');
+                }
+            } catch (err) {
+                showToast('Failed to load admin queue', 'error');
+            }
+        }
+
+        // Modals
+        function openApproveModal(id) {
+            document.getElementById('approveAppId').value = id;
+            document.getElementById('approveModal').classList.add('active');
+        }
+
+        function openRejectModal(id) {
+            document.getElementById('rejectAppId').value = id;
+            document.getElementById('rejectModal').classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        async function submitApprove() {
+            const id = document.getElementById('approveAppId').value;
+            const validityDays = parseInt(document.getElementById('approveValidity').value) || 180;
+            const remark = document.getElementById('approveRemark').value.trim();
+
+            try {
+                const res = await fetch(`${API}/api/applications/${id}/approve`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ validityDays, remark })
+                });
+                if (!res.ok) throw new Error('Approve failed');
+                showToast(`Application #${id} approved successfully!`, 'success');
+                closeModal('approveModal');
+                loadAdminDashboard();
+                updateStats();
+            } catch (err) {
+                showToast(err.message, 'error');
+            }
+        }
+
+        async function submitReject() {
+            const id = document.getElementById('rejectAppId').value;
+            const rejectionReason = document.getElementById('rejectReason').value.trim();
+            const remark = document.getElementById('rejectRemark').value.trim();
+
+            if (!rejectionReason) {
+                showToast('Rejection reason is required', 'error');
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API}/api/applications/${id}/reject`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ rejectionReason, remark })
+                });
+                if (!res.ok) throw new Error('Reject failed');
+                showToast(`Application #${id} rejected`, 'info');
+                closeModal('rejectModal');
+                loadAdminDashboard();
+                updateStats();
+            } catch (err) {
+                showToast(err.message, 'error');
+            }
+        }
+    </script>
+</body>
+</html>
